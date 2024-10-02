@@ -27,7 +27,9 @@ function App() {
       try{
           const response =await apiClient.get(GET_USER_INFO,{withCredentials: true});
           if(response.status == 200 && response.data.user.id){
-            setUserInfo(response.data.user)
+            setUserInfo(response.data.user);
+            console.log(userInfo);
+            
           }else{
             setUserInfo(undefined)
           }     
