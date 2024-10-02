@@ -8,7 +8,7 @@ import { apiClient } from "./lib/api-client";
 import { GET_USER_INFO } from "./utils/constants";
 
 const PrivateRoute = ({ children }) => {
-  const { userInfo } = useAppStore();
+  const { userInfo  } = useAppStore();
   const isAuthenticated = !!userInfo;
   return isAuthenticated ? children : <Navigate to="/auth" />;
 };
@@ -22,11 +22,14 @@ const AuthRoute = ({ children }) => {
 function App() {
   const {userInfo,setUserInfo} = useAppStore();
   const [loading, setLoading] = useState(true)  
+  
   useEffect(()=>{
     const getUserData = async()=>{
       try{
           const response =await apiClient.get(GET_USER_INFO,{withCredentials: true});
+          
           if(response.status == 200 && response.data.user.id){
+            
             setUserInfo(response.data.user);
             console.log(userInfo);
             
@@ -35,7 +38,9 @@ function App() {
           }     
       }
       catch(error){
-        setUserInfo(undefined)        
+        setUserInfo(undefined)     
+        console.log(error);
+           
       }
       finally{
         setLoading(false)

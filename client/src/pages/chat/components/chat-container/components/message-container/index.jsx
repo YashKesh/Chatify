@@ -2,7 +2,7 @@ import { apiClient } from "@/lib/api-client";
 import { useAppStore } from "@/store";
 import { GET_ALL_MESSAGES_ROUTE, HOST } from "@/utils/constants";
 import moment from "moment";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect ,useState} from "react";
 import { MdFolder } from "react-icons/md";
 import { IoMdArrowRoundDown } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
@@ -14,8 +14,7 @@ const MessageContainer = () => {
     selectedChatData,
     selectedChatMessages,
     setSelectedChatMessages,
-    setIsDownloading,
-    setFileDownloadProgress,
+    
   } = useAppStore();
   const [showImage, setShowImage] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
@@ -72,14 +71,8 @@ const MessageContainer = () => {
     });
   };
   const downloadFile = async (file) => {
-    setIsDownloading(true);
-    setFileDownloadProgress(0);
     const response = await apiClient.get(`${HOST}/${file}`, {
-      responseType: "blob",onDownloadProgress : (progressEvent)=>{
-        const {loaded , total } = progressEvent;
-        const percentCompleted = Math.round((loaded *100)/total);
-        setFileDownloadProgress(percentCompleted);
-      }
+      responseType: "blob",
     });
     const urlBlob = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
@@ -89,8 +82,6 @@ const MessageContainer = () => {
     link.click();
     link.remove();
     window.URL.revokeObjectURL(urlBlob);
-    setIsDownloading(false);
-    setFileDownloadProgress(0);
   };
   const renderDMMessages = (message) => {
     return (
